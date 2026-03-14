@@ -26,20 +26,21 @@ def view_inventory(inventory):
         for index, car in enumerate(inventory, start=1):
             print(f"{index}, {car['brand']} {car['model']} | Year: {car['year']} | Mileage: {car['mileage']} | Buy Price: £{car['buy_price']} | Sell Price: £{car['sell_price']}")
     
-def view_stats(balance, cars_sold, total_profit):
+def view_stats(balance, cars_sold, total_profit, day):
     print("\n=== Dealership Stats ===")
+    print(f"Current Day: {day}")
     print(f"Current Balance: £{balance}")
     print(f"Cars Sold: {cars_sold}")
     print(f"Total profit: £{total_profit}")
     
-def sell_car(inventory, balance, cars_sold, total_profit):
+def sell_car(inventory, balance, cars_sold, total_profit, day):
     
     while True:
             print("\n=== Sell Car===")
             
             if len(inventory) == 0:
                 print("No cars available to sell.")
-                return balance, cars_sold, total_profit
+                return balance, cars_sold, total_profit, day
             
             for index, car in enumerate(inventory, start=1):
                 print(f"{index}, {car['brand']} {car['model']} (£{car['sell_price']})")
@@ -49,7 +50,7 @@ def sell_car(inventory, balance, cars_sold, total_profit):
             choice = input("Select a car to sell: ")
             
             if choice.lower() == "b":
-                return balance, cars_sold, total_profit
+                return balance, cars_sold, total_profit, day
             
             if choice.isdigit():
                 choice = int(choice)
@@ -62,11 +63,12 @@ def sell_car(inventory, balance, cars_sold, total_profit):
                     balance += car["sell_price"]
                     cars_sold += 1
                     total_profit += profit
+                    day += 1
                     
                     print(f"\nSold {car['brand']} {car['model']} for £{car['sell_price']}")
                     print(f"Profit: £{profit}")
                     
-                    return balance, cars_sold, total_profit
+                    return balance, cars_sold, total_profit, day
             print("Invalid choice.")
     
 def generate_random_car():
@@ -100,7 +102,7 @@ def generate_random_car():
     return car
 
 
-def buy_car(inventory, balance):
+def buy_car(inventory, balance, day):
     cars_for_sale = [generate_random_car(), generate_random_car(), generate_random_car()]
     
     while True:
@@ -113,7 +115,7 @@ def buy_car(inventory, balance):
         choice = input("Select a car to buy: ")
         
         if choice.lower() == "b":
-            return balance
+            return balance, day
         if choice.isdigit():
             choice = int(choice)
             
@@ -123,6 +125,7 @@ def buy_car(inventory, balance):
                 if balance >= selected_car["buy_price"]:
                     inventory.append(selected_car)
                     balance -= selected_car["buy_price"]
+                    day += 1
                     
                     print(f"\nBought {selected_car['brand']} {selected_car['model']} for £{selected_car['buy_price']}")
                 else:
@@ -137,6 +140,7 @@ def main():
     balance = 50000
     cars_sold = 0
     total_profit = 0
+    day = 1
     
     inventory = [
         {"brand": "BMW", "model": "320d", "year": 2018, "mileage": 54000, "buy_price": 12000, "sell_price": 14500},
@@ -157,13 +161,13 @@ def main():
                     print("View Inventory selected")
                     view_inventory(inventory)
                 elif choice == "2":
-                    balance = buy_car(inventory, balance)
+                    balance, day = buy_car(inventory, balance, day)
                 elif choice == "3":
-                    balance, cars_sold, total_profit = sell_car(
-                        inventory, balance, cars_sold, total_profit
+                    balance, cars_sold, total_profit, day = sell_car(
+                        inventory, balance, cars_sold, total_profit, day
                         )
                 elif choice == "4":
-                    view_stats(balance, cars_sold, total_profit)
+                    view_stats(balance, cars_sold, total_profit, day)
                 elif choice == "5":
                     print("Goodbye!")
                     running = False
