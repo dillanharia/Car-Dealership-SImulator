@@ -4,6 +4,10 @@
 ## V2 Random car generation, Customer preferences, Day system, Random events
 ## V3 Save/load, Repairs, Negotiation, Reputation
 
+import random
+
+
+
 # ---Methods---
 def show_menu():
     print("\n=== Car Dealership Simulator ===")
@@ -65,14 +69,39 @@ def sell_car(inventory, balance, cars_sold, total_profit):
                     return balance, cars_sold, total_profit
             print("Invalid choice.")
     
+def generate_random_car():
+    brands_and_models = {
+        "BMW": ["220i", "M235i", "M240i", "M2", "320i", "M340i", "M3", "M3 Competition", "420i", "M440i", "M4", "M4 Competition", "X1", "X2", "X3", "X3M", "X4","X5"],
+        "Audi": ["A1", "A2", "A3", "S3", "RS3", "A4", "A5", "A6", "S4", "S5", "S6", "Q2", "Q3", "Q4", "Q5"],
+        "Ford": ["Fiesta", "Focus", "Puma"],
+        "Mercedes": ["A-Class", "C200", "GLA"],
+        "Toyota": ["Yaris", "Prius", "Corolla"],
+        "Volkswagen": ["Golf", "Golf R", "Polo", "Tiguan"]
+    }
+    
+    brand = random.choice(list(brands_and_models.keys()))
+    model = random.choice(brands_and_models[brand])
+    
+    year = random.randint(2010, 2026)
+    mileage = random.randint(1000, 150000)
+    
+    buy_price = random.randint(5000, 30000)
+    sell_price = buy_price + random.randint(1500, 10000)
+    
+    car = {
+        "brand": brand,
+        "model": model,
+        "year": year,
+        "mileage": mileage,
+        "buy_price": buy_price,
+        "sell_price": sell_price
+    }
+    
+    return car
+
 
 def buy_car(inventory, balance):
-    cars_for_sale = [
-        {"brand": "Mercedes", "model": "C200", "year": 2020, "mileage": 3800, "buy_price": 15000, "sell_price": 18500},
-        {"brand": "Audi", "model": "S3", "year": 2023, "mileage": 16520, "buy_price": 29000, "sell_price": 35000},
-        {"brand": "Toyota", "model": "Yaris", "year": 2019, "mileage": 57833, "buy_price": 12943, "sell_price": 14020},
-        {"brand": "Suzuki", "model": "Swift", "year": 2013, "mileage": 69203, "buy_price": 3500, "sell_price": 5000}
-    ]
+    cars_for_sale = [generate_random_car(), generate_random_car(), generate_random_car()]
     
     while True:
         print("\n=== Buy Car===")
