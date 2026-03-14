@@ -66,12 +66,48 @@ def sell_car(inventory, balance, cars_sold, total_profit):
             print("Invalid choice.")
     
 
+def buy_car(inventory, balance):
+    cars_for_sale = [
+        {"brand": "Mercedes", "model": "C200", "year": 2020, "mileage": 3800, "buy_price": 15000, "sell_price": 18500},
+        {"brand": "Audi", "model": "S3", "year": 2023, "mileage": 16520, "buy_price": 29000, "sell_price": 35000},
+        {"brand": "Toyota", "model": "Yaris", "year": 2019, "mileage": 57833, "buy_price": 12943, "sell_price": 14020},
+        {"brand": "Suzuki", "model": "Swift", "year": 2013, "mileage": 69203, "buy_price": 3500, "sell_price": 5000}
+    ]
+    
+    while True:
+        print("\n=== Buy Car===")
+        
+        for index, car in enumerate(cars_for_sale, start=1):
+                                    print(f"{index}. {car['brand']} {car['model']} | Year: {car['year']} | Mileage: {car['mileage']} | Cost: £{car['buy_price']}")
+        print("B. Back to menu")
+        
+        choice = input("Select a car to buy: ")
+        
+        if choice.lower() == "b":
+            return balance
+        if choice.isdigit():
+            choice = int(choice)
+            
+            if 1 <= choice <= len(cars_for_sale):
+                selected_car = cars_for_sale[choice - 1]
+                
+                if balance >= selected_car["buy_price"]:
+                    inventory.append(selected_car)
+                    balance -= selected_car["buy_price"]
+                    
+                    print(f"\nBought {selected_car['brand']} {selected_car['model']} for £{selected_car['buy_price']}")
+                else:
+                    print("You do not have enough money to buy that car.")
+            else:
+                print("Invalid choice.")
+        else:
+            print("Invalid Choice.")
+                    
 def main():
     
     balance = 50000
     cars_sold = 0
     total_profit = 0
-    
     
     inventory = [
         {"brand": "BMW", "model": "320d", "year": 2018, "mileage": 54000, "buy_price": 12000, "sell_price": 14500},
@@ -80,9 +116,7 @@ def main():
         {"brand": "Toyota", "model": "Prius", "year": 2025, "mileage": 300, "buy_price": 16000, "sell_price": 18000},
         {"brand": "Volkswagen", "model": "Golf", "year": 2010, "mileage": 76004, "buy_price": 7500, "sell_price": 9200}
         ]
-                  
-                  
-                  
+                         
     running = True
     
     while running:
@@ -94,7 +128,7 @@ def main():
                     print("View Inventory selected")
                     view_inventory(inventory)
                 elif choice == "2":
-                    print("Buy Car selected")
+                    balance = buy_car(inventory, balance)
                 elif choice == "3":
                     balance, cars_sold, total_profit = sell_car(
                         inventory, balance, cars_sold, total_profit
