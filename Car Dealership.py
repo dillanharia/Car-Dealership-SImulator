@@ -134,6 +134,22 @@ def buy_car(inventory, balance, day):
                 print("Invalid choice.")
         else:
             print("Invalid Choice.")
+            
+            
+def check_game_state(balance, day):
+    if balance >= 100000:
+        print("\n You win. You created a successful car dealership")
+        print(f"\n Your final balance was £{balance}")
+        return False
+    
+    if day > 15:
+        print("\n GAME OVER. You did not create a successful car dealership")
+        return False
+    
+    return True
+        
+        
+        
                     
 def main():
     
@@ -173,6 +189,9 @@ def main():
                     running = False
                 else:
                     print("Invalid choice. Please try again")
+                
+                if running:
+                    running = check_game_state(balance, day)
                 
 # Main
 main()
